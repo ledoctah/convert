@@ -20,20 +20,21 @@ form.onsubmit = evt => {
 
   switch (currency.value) {
     case "USD":
-      convertCurrency(amount.value, USD, "US$");
+      convertCurrency(amount.value, USD, currency.value);
       break;
     case "EUR":
-      convertCurrency(amount.value, EUR, "€");
+      convertCurrency(amount.value, EUR, currency.value);
       break;
     case "GBP":
-      convertCurrency(amount.value, GBP, "£");
+      convertCurrency(amount.value, GBP, currency.value);
       break;
   }
 }
 
-function convertCurrency(amount, price, symbol) {
+function convertCurrency(amount, price, currency) {
   try {
-    description.innerText = `${symbol} ${amount} = ${formatCurrencyBRL(price)}`;
+    description.innerText =
+      `${formatCurrency(amount, currency, 0)} = ${formatCurrency(price, "BRL")}`;
 
     let total = amount * price;
 
@@ -42,7 +43,7 @@ function convertCurrency(amount, price, symbol) {
       return;
     }
 
-    total = formatCurrencyBRL(total).replace("R$", "");
+    total = formatCurrency(total, "BRL").replace("R$", "");
 
     result.textContent = `${total} Reais`;
 
@@ -54,9 +55,17 @@ function convertCurrency(amount, price, symbol) {
   }
 }
 
-function formatCurrencyBRL(value) {
+/**
+ * Function to convert a numeric value to a specified currency format.
+ * @param {number} value Value to be formatted
+ * @param {string} currency Currency identifier
+ * @param {number} decimalPlaces Number of decimal places to be shown
+ * @returns {string}
+ */
+function formatCurrency(value, currency = "BRL", decimalPlaces = 2) {
   return Number(value).toLocaleString('pt-BR', {
     style: 'currency',
-    currency: 'BRL',
+    currency: currency,
+    maximumFractionDigits: decimalPlaces,
   });
 }
