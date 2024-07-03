@@ -32,7 +32,7 @@ form.onsubmit = evt => {
 
 function convertCurrency(amount, price, symbol) {
   try {
-    description.innerText = `${symbol} ${amount} = R$ ${price}`;
+    description.innerText = `${symbol} ${amount} = ${formatCurrencyBRL(price)}`;
 
     footer.classList.add("show-result");
   } catch (err) {
@@ -40,4 +40,11 @@ function convertCurrency(amount, price, symbol) {
     console.error(err);
     alert("Não foi possível converter. Tente novamente mais tarde.")
   }
+}
+
+function formatCurrencyBRL(value) {
+  return Number(value).toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  });
 }
